@@ -76,7 +76,7 @@ Microsoft.SqlServer.CatalogStore\Catalog.Whitelist.txt file, which is input into
 way, we know both DacFx and CatalogStore query the same tables.
 
 ## TODO
-Explicit mapping of primary keys
-Figure out how to handle sql_variants - currently not mapped
-Handle timespan column types - currently not mapped
-Introduce loading profiles: lazy, object explorer, reverse engineer
+*  Explicit mapping of primary keys
+* Figure out how to handle sql_variants - currently not mapped
+* Handle timespan column types - currently not mapped
+* Introduce loading profiles: lazy, object explorer, reverse engineer
