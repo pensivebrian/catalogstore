@@ -1,0 +1,7 @@
+<Project>
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26406-04" />
+    <PackageReference Include="Microsoft.Data.SQLite" Version="2.1.0-preview2-final" />    
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.0-preview2-final" />    
+  </ItemGroup>
+</Project>
