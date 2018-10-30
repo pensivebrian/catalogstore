@@ -1,8 +1,10 @@
 ﻿using System;
 using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,34 +13,60 @@ namespace CatalogStoreCodeGenerator
 {
     public class CatalogGenerator
     {  
-        public CodeNamespace Generate(List<CatalogVersion> catalogVersions)
+        public void Generate(List<CatalogVersion> catalogVersions, string outputFolder)
         {
             foreach (CatalogVersion catalogVersion in catalogVersions)
             {
+                Console.WriteLine("Loading catalog xml file {0}...", catalogVersion.XmlFile);
                 catalogVersion.LoadCatalogDataSetFromXml();
             }
 
+            Console.WriteLine("Merging catalog xml files...");
             DataSet mergedDataSet = this.MergeDataSet(catalogVersions);
 
-            CodeNamespace namespaceDecl = new CodeNamespace("Microsoft.SqlServer.CatalogStore");
+            List<CodeTypeDeclaration> typeDecls = new List<CodeTypeDeclaration>();
 
-            namespaceDecl.Imports.Add(new CodeNamespaceImport("System"));
-            namespaceDecl.Imports.Add(new CodeNamespaceImport("System.Data.SqlClient"));
-            namespaceDecl.Imports.Add(new CodeNamespaceImport("Microsoft.Data.Sqlite"));
-            namespaceDecl.Imports.Add(new CodeNamespaceImport("Microsoft.EntityFrameworkCore"));
-
+            Console.WriteLine("Generating type {0}...", "DatabaseCatalogContext");
             DatabaseCatalogTypeGenerator databaseCatalogTypeGenerator = new DatabaseCatalogTypeGenerator(mergedDataSet, catalogVersions);
-            namespaceDecl.Types.Add(databaseCatalogTypeGenerator.Generate());
+            typeDecls.Add(databaseCatalogTypeGenerator.Generate());
 
             foreach (DataTable dataTable in databaseCatalogTypeGenerator.MergeDataSet.Tables)
             {
                 Console.WriteLine("Generating type {0}...", dataTable.TableName);
                 CatalogTableTypeGenerator catalogTypeGenerator = new CatalogTableTypeGenerator(dataTable);
                 CodeTypeDeclaration catalogTypeDecl = catalogTypeGenerator.Generate();
-                namespaceDecl.Types.Add(catalogTypeDecl);
+                typeDecls.Add(catalogTypeDecl);
             }
 
-            return namespaceDecl;
+            Console.WriteLine("Writing code files...");
+            foreach (CodeTypeDeclaration typeDecl in typeDecls)
+            {
+                CodeNamespace namespaceDecl = new CodeNamespace("Microsoft.SqlServer.CatalogStore");
+                namespaceDecl.Imports.Add(new CodeNamespaceImport("System"));
+                namespaceDecl.Imports.Add(new CodeNamespaceImport("System.Data.SqlClient"));
+                namespaceDecl.Imports.Add(new CodeNamespaceImport("Microsoft.Data.Sqlite"));
+                namespaceDecl.Imports.Add(new CodeNamespaceImport("Microsoft.EntityFrameworkCore"));
+                namespaceDecl.Types.Add(typeDecl);
+
+                WriteToFile(namespaceDecl, outputFolder + Path.DirectorySeparatorChar + typeDecl.Name + ".g.cs");
+            }
+        }
+
+        private static void WriteToFile(CodeNamespace codeNamespace, string filePath)
+        {
+            CodeCompileUnit compileUnit = new CodeCompileUnit();
+            compileUnit.Namespaces.Add(codeNamespace);
+
+            CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
+            CodeGeneratorOptions options = new CodeGeneratorOptions
+            {
+                BracingStyle = "C",
+            };
+
+            using (StreamWriter sourceWriter = new StreamWriter(filePath))
+            {
+                provider.GenerateCodeFromCompileUnit(compileUnit, sourceWriter, options);
+            }
         }
 
         private DataSet MergeDataSet(List<CatalogVersion> catalogVersions)

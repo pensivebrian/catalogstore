@@ -1,6 +1,4 @@
 ﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -62,8 +60,7 @@ namespace CatalogStoreCodeGenerator
         private static void GenerateCatalogCode()
         {
             CatalogGenerator catalogGenerator = new CatalogGenerator();
-            CodeNamespace codeNamespace = catalogGenerator.Generate(CatalogVersion.Versions.ToList());
-            WriteToFile(codeNamespace);
+            catalogGenerator.Generate(CatalogVersion.Versions.ToList(), @"..\..\..\..\Microsoft.SqlServer.CatalogStore\CodeGen");
         }
 
         private static void GenerateCatalogDataSetXmlFiles()
@@ -111,23 +108,5 @@ namespace CatalogStoreCodeGenerator
             return password;
         }
 
-        private static void WriteToFile(CodeNamespace codeNamespace)
-        {
-            Console.WriteLine("Writing code file...");
-
-            CodeCompileUnit compileUnit = new CodeCompileUnit();
-            compileUnit.Namespaces.Add(codeNamespace);
-
-            CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
-            CodeGeneratorOptions options = new CodeGeneratorOptions
-            {
-                BracingStyle = "C",
-            };
-
-            using (StreamWriter sourceWriter = new StreamWriter(@"..\..\..\..\Microsoft.SqlServer.CatalogStore\Code.g.cs"))
-            {
-                provider.GenerateCodeFromCompileUnit(compileUnit, sourceWriter, options);
-            }
-        }
     }
 }
