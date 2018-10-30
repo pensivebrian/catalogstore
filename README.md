@@ -9,7 +9,7 @@ engineering a database: CatalogStore.
 ## DacFx Reverse Engineering
 Today, when DacFx reverse engineers a database, it issues a brutal query that punches SQL Server in the face.  The query is 
 380K in size, and does all kinds of complicated joins and fancy TSQL manipulation.  See file 
-[DacFxReverseEngineeringQuery2016.sql](ReverseEngineeringTableDump/DacFxReversEngineeringQuery2016.sql).
+[DacFxReverseEngineeringQuery2016.sql](ReverseEngineeringTableDump/DacFxReverseEngineeringQuery2016.sql).
 After viewing that file and changing your pants, you can probably guess that executing this query is very inefficient. Executing 
 this query against an Azure 'Basic SKU' database, pegs the DTU quota, making the database unusable for a few seconds after 
 execution. 
