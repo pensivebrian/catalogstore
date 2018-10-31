@@ -60,21 +60,20 @@ counts grow, CatalogStore scales better than DacFx.
 ## Projects
 
 #### Microsoft.SqlServer.CatalogStore
-* The code generated catalog store
+* The code generated CatalogStore
 
 #### CatalogStoreCodeGenerator
-* Code generates the Microsoft.SqlServer.CatalogStore\Code.g.cs file
-* Uses the Catalog.Whitelist.txt to get the system catalog tables used for reverse engineering.
-* Generates and caches the system catalog as an xml file (e.g Catalog.2005.xml) for each SQL Server version.
+* Code generates the files in the [Microsoft.SqlServer.CatalogStore\CodeGen](Microsoft.SqlServer.CatalogStore/CodeGen) folder
+* Uses the [Catalog.Whitelist.txt](CatalogStoreCodeGenerator/Catalog.Whitelist.txt) to get all system catalog tables used for reverse engineering.
+* Generates and caches the system catalog list (e.g. [Catalog.2005.txt](https://raw.githubusercontent.com/pensivebrian/catalogstore/master/CatalogStoreCodeGenerator/Catalog.2005.txt)) and catalog xml meta data files (e.g [Catalog.2005.xml](CatalogStoreCodeGenerator/Catalog.2005.xml)) for each SQL Server version.
 
 
 #### Microsoft.SqlServer.CatalogStore.Tests
-* Has tests to compare the execution of the DacFx query with the catalog store version.
+* Has tests to compare the execution of the DacFx query with the CatalogStore version.
 
 #### ReverseEngineeringTableDump
 * Uses ScriptDom to parse the DacFx reverse engineering queries for Azure and SQL 2016, and generates the 
-Microsoft.SqlServer.CatalogStore\Catalog.Whitelist.txt file, which is input into the code generation process.  This 
-way, we know both DacFx and CatalogStore query the same tables.
+[Catalog.Whitelist.txt](CatalogStoreCodeGenerator/Catalog.Whitelist.txt) file, which is input into the code generation process.  This way, both DacFx and CatalogStore query the same tables.
 
 ## TODO
 *  Explicit mapping of primary keys
