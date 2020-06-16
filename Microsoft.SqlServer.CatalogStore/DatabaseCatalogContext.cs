@@ -8,6 +8,12 @@ using System.Text;
 
 namespace Microsoft.SqlServer.CatalogStore
 {
+    public enum CatalogStore
+    {
+        InMemory,
+        File,
+    }
+
     public partial class DatabaseCatalogContext
     {
         private ServerInfo _serverInfo;
@@ -31,7 +37,22 @@ namespace Microsoft.SqlServer.CatalogStore
 
         public void LoadCatalog(string connectionString)
         {
-            this.InitializeSQLite();
+            this.LoadCatalog(connectionString, CatalogStore.InMemory);
+        }
+
+        public void LoadCatalog(string connectionString, CatalogStore catalogStore)
+        {
+            if (catalogStore == CatalogStore.File)
+            {
+                _connectionString = string.Format("DataSource=file:{0}.dacmodel;Cache=Shared", this._connectionId);
+            }
+            else
+            {
+                _connectionString = string.Format("DataSource=file:{0}.dacmodel;Mode=Memory;Cache=Shared", this._connectionId);
+            }
+
+            this.InitializeSQLite();        // Takes about .15 seconds.  We could pre-create the file.
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();

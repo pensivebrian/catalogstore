@@ -30,10 +30,24 @@ namespace Microsoft.SqlServer.CatalogStore.Tests
 
         public string WideWorldImportersConnectionString { get { return "server=bro-sql2017;database=AdventureWorks;Integrated Security=true"; } }
 
+        public string Dynamics365ConnectionString { get { return "server=bro-sql2017;database=dyn365;Integrated Security=true"; } }
+
+        [TestMethod]
+        public void TestDynamics365CatalogStore()
+        {
+            RunCatalogStoreTest(Dynamics365ConnectionString);
+        }
+
         [TestMethod]
         public void TestAdventureWorksCatalogStore()
         {
             RunCatalogStoreTest(AdventureWorksConnectionString);
+        }
+
+        [TestMethod]
+        public void TestAdventureWorksCatalogStoreFile()
+        {
+            RunCatalogStoreTest(AdventureWorksConnectionString, CatalogStore.File);
         }
 
         [TestMethod]
@@ -150,13 +164,13 @@ namespace Microsoft.SqlServer.CatalogStore.Tests
             RunDacFxTest(this.AzureAdventureWorksP1ConnectionString, azure: true);
         }
 
-        public void RunCatalogStoreTest(string connectionString)
+        public void RunCatalogStoreTest(string connectionString, CatalogStore catalogStore = CatalogStore.InMemory)
         {
             try
             {
                 DatabaseCatalogContext databaseCatalog = new DatabaseCatalogContext();
                 Stopwatch stopwatch = Stopwatch.StartNew();
-                databaseCatalog.LoadCatalog(connectionString);
+                databaseCatalog.LoadCatalog(connectionString, catalogStore);
                 stopwatch.Stop();
                 Console.WriteLine("Loading: {0}", stopwatch.Elapsed.TotalSeconds);
             }

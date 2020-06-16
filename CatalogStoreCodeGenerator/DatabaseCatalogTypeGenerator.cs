@@ -151,15 +151,6 @@ namespace CatalogStoreCodeGenerator
 
             methodDecl.Statements.Add(
                 new CodeAssignStatement(
-                    new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), "_connectionString"),
-                    new CodeMethodInvokeExpression(
-                        new CodeTypeReferenceExpression(typeof(string)),
-                        "Format",
-                        new CodePrimitiveExpression("DataSource=file:{0};Mode=Memory;Cache=Shared"),
-                        new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), "_connectionId"))));
-
-            methodDecl.Statements.Add(
-                new CodeAssignStatement(
                     new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), "_sqliteConnection"),
                     new CodeObjectCreateExpression(
                         typeof(SqliteConnection),
@@ -290,6 +281,14 @@ namespace CatalogStoreCodeGenerator
 
                 hasRowsConditionStatement.TrueStatements.Add(
                     new CodeVariableDeclarationStatement(
+                        typeof(SqliteTransaction),
+                        "sqliteTransaction",
+                        new CodeMethodInvokeExpression(
+                            new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), "_sqliteConnection"),
+                            "BeginTransaction")));
+
+                hasRowsConditionStatement.TrueStatements.Add(
+                    new CodeVariableDeclarationStatement(
                         typeof(SqliteCommand),
                         "sqliteCommand", 
                         new CodeMethodInvokeExpression(
@@ -391,6 +390,10 @@ namespace CatalogStoreCodeGenerator
                 hasRowsConditionStatement.TrueStatements.Add(
                     new CodeMethodInvokeExpression(
                         new CodeVariableReferenceExpression("sqliteCommand"), "Dispose"));
+
+                hasRowsConditionStatement.TrueStatements.Add(
+                    new CodeMethodInvokeExpression(
+                        new CodeVariableReferenceExpression("sqliteTransaction"), "Commit"));
 
                 tcfStatement.TryStatements.Add(hasRowsConditionStatement);
                 tcfStatement.TryStatements.Add(new CodeSnippetStatement());
