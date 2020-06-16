@@ -18,6 +18,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.SqlServer.Catalog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseEngineeringTableDump", "ReverseEngineeringTableDump\ReverseEngineeringTableDump.csproj", "{D1081E0A-E1A3-4D6C-BFBD-9371EBADC85D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryTestGenerator", "QueryTestGenerator\QueryTestGenerator.csproj", "{67B652F3-47B1-42DD-9E37-FB5802523820}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryTest", "QueryTest\QueryTest.csproj", "{461FDA40-9ACD-4CCA-9130-CAE194EA9872}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +44,14 @@ Global
 		{D1081E0A-E1A3-4D6C-BFBD-9371EBADC85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1081E0A-E1A3-4D6C-BFBD-9371EBADC85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1081E0A-E1A3-4D6C-BFBD-9371EBADC85D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67B652F3-47B1-42DD-9E37-FB5802523820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67B652F3-47B1-42DD-9E37-FB5802523820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67B652F3-47B1-42DD-9E37-FB5802523820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67B652F3-47B1-42DD-9E37-FB5802523820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{461FDA40-9ACD-4CCA-9130-CAE194EA9872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461FDA40-9ACD-4CCA-9130-CAE194EA9872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461FDA40-9ACD-4CCA-9130-CAE194EA9872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461FDA40-9ACD-4CCA-9130-CAE194EA9872}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

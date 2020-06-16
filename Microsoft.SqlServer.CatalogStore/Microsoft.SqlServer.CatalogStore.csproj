@@ -1,11 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="CodeGen\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Data.SQLite" Version="3.1.5" />
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5" />
+    <PackageReference Update="System.Data.SqlClient" Version="4.8.1" />
   </ItemGroup>
 
 </Project>

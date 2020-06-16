@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom">
-      <HintPath>Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Update="Microsoft.Data.SQLite" Version="3.1.5" />
     <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5" />
     <PackageReference Update="System.Data.SqlClient" Version="4.8.1" />
