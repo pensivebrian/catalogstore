@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using Microsoft.Data.Sqlite;
 
 namespace Microsoft.SqlServer.CatalogStore
 {
@@ -44,11 +45,32 @@ namespace Microsoft.SqlServer.CatalogStore
         {
             if (catalogStore == CatalogStore.File)
             {
-                _connectionString = string.Format("DataSource=file:{0}.dacmodel;Cache=Shared", this._connectionId);
+                _connectionString = string.Format("DataSource=file:{0}.dacmodel;Cache=Shared", _connectionId);
             }
             else
             {
-                _connectionString = string.Format("DataSource=file:{0}.dacmodel;Mode=Memory;Cache=Shared", this._connectionId);
+                _connectionString = string.Format("DataSource=file:{0}.dacmodel;Mode=Memory;Cache=Shared", _connectionId);
+            }
+
+            _sqliteConnection = new SqliteConnection(_connectionString);
+            _sqliteConnection.Open();
+
+            using (SqliteCommand command = _sqliteConnection.CreateCommand())
+            {
+                // Enable write-ahead logging to increase write performance by reducing amount of disk writes,
+                // by combining writes at checkpoint, salong with using sequential-only writes to populate the log.
+                // Also, WAL allows for relaxed ("normal") "synchronous" mode, see below.
+                command.CommandText = "pragma journal_mode=wal";
+                command.ExecuteNonQuery();
+
+                // Set "synchronous" mode to "normal" instead of default "full" to reduce the amount of buffer flushing syscalls,
+                // significantly reducing both the blocked time and the amount of context switches.
+                // When coupled with WAL, this (according to https://sqlite.org/pragma.html#pragma_synchronous and 
+                // https://www.sqlite.org/wal.html#performance_considerations) is unlikely to significantly affect durability,
+                // while significantly increasing performance, because buffer flushing is done for each checkpoint, instead of each
+                // transaction. While some writes can be lost, they are never reordered, and higher layers will recover from that.
+                command.CommandText = "pragma synchronous=normal";
+                command.ExecuteNonQuery();
             }
 
             this.InitializeSQLite();        // Takes about .15 seconds.  We could pre-create the file.

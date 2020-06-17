@@ -150,18 +150,6 @@ namespace CatalogStoreCodeGenerator
             methodDecl.Attributes = MemberAttributes.Private | MemberAttributes.Final;
 
             methodDecl.Statements.Add(
-                new CodeAssignStatement(
-                    new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), "_sqliteConnection"),
-                    new CodeObjectCreateExpression(
-                        typeof(SqliteConnection),
-                        new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), "_connectionString"))));
-
-            methodDecl.Statements.Add(
-                new CodeMethodInvokeExpression(
-                    new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), "_sqliteConnection"),
-                    "Open"));
-
-            methodDecl.Statements.Add(
                 new CodeVariableDeclarationStatement(
                     typeof(SqliteCommand),
                     "command",

@@ -39,6 +39,13 @@ namespace Microsoft.SqlServer.CatalogStore.Tests
         }
 
         [TestMethod]
+        public void TestDynamics365CatalogStoreFile()
+        {
+            RunCatalogStoreTest(Dynamics365ConnectionString, CatalogStore.File);
+        }
+
+
+        [TestMethod]
         public void TestAdventureWorksCatalogStore()
         {
             RunCatalogStoreTest(AdventureWorksConnectionString);
