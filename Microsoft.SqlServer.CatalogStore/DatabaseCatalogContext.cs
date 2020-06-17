@@ -58,7 +58,7 @@ namespace Microsoft.SqlServer.CatalogStore
             using (SqliteCommand command = _sqliteConnection.CreateCommand())
             {
                 // Enable write-ahead logging to increase write performance by reducing amount of disk writes,
-                // by combining writes at checkpoint, salong with using sequential-only writes to populate the log.
+                // by combining writes at checkpoints, along with using sequential-only writes to populate the log.
                 // Also, WAL allows for relaxed ("normal") "synchronous" mode, see below.
                 command.CommandText = "pragma journal_mode=wal";
                 command.ExecuteNonQuery();
