@@ -1,5 +1,5 @@
 # CatalogStore
-An experimental .NET Core 2.1 library to more efficiently reverse engineer a SQL Server database.
+An experimental .NET Core library to more efficiently reverse engineer a SQL Server database.
 
 ## Overview
 All database tooling needs to reverse engineer a database.  Tooling does this by querying the system catalog about the objects
@@ -21,7 +21,7 @@ and then update the copy to handle the new system catalog tables and columns.
 ## CatalogStore Reverse Engineering
 This project take a different approach.  SQL Server exposes rich meta data over the system catalog.  We leverage this, and code
 generate a library that can execute simple 'select *' statements for each system catalog table.  We take the results, and 
-place them all in an in-memory sqlite database.  Then, we code generate an entity framework model over the sqlite system 
+place them all in a sqlite database.  Then, we code generate an entity framework model over the sqlite system 
 catalog tables.  This give us a nice type-safe query experience over the system catalog, with all processing occurring on 
 the client side.  Because everything is code generated, maintenance should be lower.
 
